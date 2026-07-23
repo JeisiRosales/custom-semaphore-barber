@@ -1,0 +1,9 @@
+build/
+*.o
+*.obj
+*.exe
+.vscode/
+.idea/
+*.out
+*.app
+compile_commands.json
