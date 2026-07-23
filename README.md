@@ -47,17 +47,32 @@ custom-semaphore-barber/
 2. Abrir "MSYS2 UCRT64" desde el menú inicio
 3. Ejecutar:
    ```bash
-   pacman -Syu                           # Actualizar paquetes
-   pacman -S mingw-w64-ucrt-x86_64-gcc   # Instalar g++
-   pacman -S make                        # Instalar make
-   g++ --version                         # Verificar instalación
-   make --version                        # Verificar instalación
+   # Actualizar paquetes
+   pacman -Syu
+   ```
+   ```bash
+   # Instalar g++
+   pacman -S mingw-w64-ucrt-x86_64-gcc
+   ```
+   ```bash
+   # Instalar make
+   pacman -S make
+   ```
+   ```bash
+   # Verificar instalación
+   g++ --version
+   ```
+   ```bash
+   # Verificar instalación
+   make --version
    ```
 
 #### Verificar instalación en Linux/Mac/WSL
 
 ```bash
 g++ --version
+```
+```bash
 make --version
 ```
 
@@ -66,15 +81,24 @@ Si falta alguno, instalarlo con el gestor de paquetes de la distribución.
 ### Ejecución desde 0
 
 ```bash
+# Clonar repositorio
 git clone https://github.com/JeisiRosales/custom-semaphore-barber.git
-
+```
+```bash
+# Seleccionar directorio
 cd custom-semaphore-barber
-
-make                     # Compila el proyecto
-
-./build/barber_shop      # Ejecuta la simulación (pedirá datos por teclado)
-
-make clean               # Limpia archivos objeto y ejecutable
+```
+```bash
+# Compila el proyecto
+make
+```
+```bash
+# Ejecuta la simulación (pedirá datos por teclado)
+./build/barber_shop
+```
+```bash
+# Limpia archivos objeto y ejecutable
+make clean
 ```
 
 Al ejecutar, el programa solicitará por teclado la cantidad de sillas de espera y la cantidad de clientes:
