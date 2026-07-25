@@ -16,40 +16,65 @@ BarberShop::BarberShop(int num_chairs)
       barber_ready(0) {}
 
 /*
-  barber() - Lógica del hilo del barbero (ciclo infinito).
+  barber() - Lógica del hilo del barbero (ciclo infinito con detección de estado).
+
+  Utiliza una variable booleana 'sleeping' para distinguir dos escenarios:
+    - Barbero dormido (sleeping == true): se imprime "Despertado por un cliente"
+      y "Cortando el cabello...".
+    - Barbero despierto atendiendo cola (sleeping == false): se imprime
+      "Atendiendo al siguiente cliente.", sin mensajes falsos de despertar.
 
   Paso 1: customers_ready.wait()
     Espera a que un cliente se siente en la sala. Si no hay clientes,
-    el barbero se queda dormido aquí (el semáforo está en 0).
+    el barbero se queda bloqueado aquí (el semáforo está en 0).
+    Si ya hay clientes en cola, el wait() retorna inmediatamente.
 
-  Paso 2: Incrementa free_chairs
-    Adquiere chair_mutex, libera una silla de espera (porque el cliente
-    va a pasar a la silla de corte) y libera el mutex.
+  Paso 2: Libera una silla de espera (chair_mutex + ++free_chairs).
 
   Paso 3: barber_ready.signal()
-    Notifica al cliente que está esperando que ya puede pasar
-    a la silla de barbería para cortarse el pelo.
+    Notifica al cliente que ya puede pasar a la silla de corte.
 
-  Paso 4: Corta el pelo
-    Simula el corte durmiendo el hilo 1 segundo. Luego vuelve al paso 1.
+  Paso 4: Corta el pelo (1.5 segundos).
+
+  Paso 5: Consulta customers_ready.get_count()
+    Si == 0: no hay más clientes → imprime "No hay clientes, durmiendo..."
+             y marca sleeping = true.
+    Si > 0:  hay clientes esperando → duerme sleeping = false para que
+             la siguiente iteración use "Atendiendo al siguiente cliente".
 */
 void BarberShop::barber() {
-    while (true) {
-        std::cout << "[Barbero] No hay clientes, durmiendo...\n";
-        customers_ready.wait();
-        std::cout << "[Barbero] Despertado por un cliente.\n";
+    bool sleeping = true;
 
-        // El cliente pasa de la sala de espera a la silla de corte.
-        // Se libera una silla de la sala de espera.
+    std::cout << "[Barbero] No hay clientes, durmiendo...\n";
+
+    while (true) {
+        bool was_sleeping = sleeping;
+
+        customers_ready.wait();
+
+        if (was_sleeping) {
+            std::cout << "[Barbero] Despertado por un cliente.\n";
+            sleeping = false;
+        }
+
         chair_mutex.lock();
         ++free_chairs;
         chair_mutex.unlock();
 
-        // El barbero notifica al cliente que ya puede acercarse.
         barber_ready.signal();
 
-        std::cout << "[Barbero] Cortando el cabello...\n";
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (was_sleeping) {
+            std::cout << "[Barbero] Cortando el cabello...\n";
+        } else {
+            std::cout << "[Barbero] Atendiendo al siguiente cliente.\n";
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        std::cout << "[Barbero] Corte terminado.\n";
+
+        if (customers_ready.get_count() == 0) {
+            std::cout << "[Barbero] No hay clientes, durmiendo...\n";
+            sleeping = true;
+        }
     }
 }
 

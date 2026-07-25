@@ -2,7 +2,7 @@
 
 ## Objetivo del Proyecto
 
-Implementar una simulación multihilo del clásico problema de sincronización **"El Barbero Dormilón"** (Dijkstra, 1971) utilizando semáforos implementados manualmente. El proyecto demuestra conceptos fundamentales de **concurrencia**, **exclusión mutua** y **sincronización entre hilos** en C++.
+Implementar una simulación multihilo del clásico problema de sincronización **"El Barbero Dormilón"** (Dijkstra, 1971) utilizando semáforos implementados manualmente. El proyecto demuestra conceptos fundamentales de **concurrencia**, **exclusión mutua** y **sincronización entre hilos** en C++. Los parámetros de la simulación (sillas, clientes y tiempos de llegada) se generan **aleatoriamente** en cada ejecución.
 
 ---
 
@@ -93,7 +93,7 @@ cd custom-semaphore-barber
 make
 ```
 ```bash
-# Ejecuta la simulación (pedirá datos por teclado)
+# Ejecuta la simulación (genera valores aleatorios automáticamente)
 ./build/barber_shop
 ```
 ```bash
@@ -101,11 +101,11 @@ make
 make clean
 ```
 
-Al ejecutar, el programa solicitará por teclado la cantidad de sillas de espera y la cantidad de clientes:
+Al ejecutar, el programa genera automáticamente valores aleatorios para la cantidad de sillas de espera (1-30), la cantidad de clientes (1-30) y el tiempo de llegada de cada cliente (1500-3000 ms):
 
 ```
-Ingrese el numero de sillas de la sala de espera: 5
-Ingrese el numero de clientes: 15
+Numero de sillas de la sala de espera: 5 (aleatorio)
+Numero de clientes: 15 (aleatorio)
 ```
 
 ---
@@ -114,7 +114,7 @@ Ingrese el numero de clientes: 15
 
 ### Contexto del Problema
 
-Una barbería tiene una sala de espera con **n sillas** (configurable por el usuario al ejecutar) y una sala de barbería con la silla del barbero. El barbero y los clientes son **hilos concurrentes** que deben coordinarse sin condiciones de carrera. El programa pide al usuario la cantidad de sillas y la cantidad de clientes, luego inicia la simulación.
+Una barbería tiene una sala de espera con **n sillas** (generadas aleatoriamente entre 1 y 30) y una sala de barbería con la silla del barbero. El barbero y los clientes son **hilos concurrentes** que deben coordinarse sin condiciones de carrera. El programa genera aleatoriamente la cantidad de sillas, la cantidad de clientes (1-30) y el tiempo de llegada de cada cliente (1500-3000 ms), luego inicia la simulación.
 
 ### Condiciones del Problema
 
@@ -162,11 +162,11 @@ Cada cliente se ejecuta una vez y termina:
    - Imprime `"[Cliente N] No hay sillas disponibles, se va."`.
    - El hilo termina sin cortarse el pelo.
 
-### Flujo en Consola (ejemplo con 3 sillas, 3 clientes)
+### Flujo en Consola (ejemplo con 3 sillas, 3 clientes generados aleatoriamente)
 
 ```
-Ingrese el numero de sillas de la sala de espera: 3
-Ingrese el numero de clientes: 3
+Numero de sillas de la sala de espera: 3 (aleatorio)
+Numero de clientes: 3 (aleatorio)
 [Barbero] No hay clientes, durmiendo...
 [Cliente 1] Se sienta en una silla. (Libres: 2)
 [Barbero] Despertado por un cliente.
@@ -189,7 +189,7 @@ Ingrese el numero de clientes: 3
 
 | Variable | Tipo | Propósito |
 |----------|------|-----------|
-| `free_chairs` | `int` | Sillas de espera disponibles (inicia en el valor ingresado por el usuario) |
+| `free_chairs` | `int` | Sillas de espera disponibles (inicia en el valor generado aleatoriamente) |
 | `chair_mutex` | `std::mutex` | Protege `free_chairs` contra accesos simultáneos |
 | `customers_ready` | `Semaphore` | Despierta al barbero; cuenta clientes esperando (inicia en 0) |
 | `barber_ready` | `Semaphore` | Sincroniza al cliente para pasar a la silla de corte (inicia en 0) |

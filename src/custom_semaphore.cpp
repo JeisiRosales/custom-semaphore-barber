@@ -34,3 +34,7 @@ void Semaphore::signal() {
     ++count;
     cv.notify_one();
 }
+
+int Semaphore::get_count() const {
+    return count;
+}

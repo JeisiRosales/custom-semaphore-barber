@@ -1,7 +1,8 @@
 /*
   main.cpp - Punto de entrada del programa.
-  Solicita al usuario el número de sillas de la sala de espera y
-  la cantidad de clientes, luego inicia la simulación.
+  Genera aleatoriamente el número de sillas de la sala de espera (1-10),
+  la cantidad de clientes (10-29) y el tiempo de llegada de cada cliente
+  (2000-4999 ms), luego inicia la simulación.
 */
 
 #include "barber_shop.hpp"
@@ -13,25 +14,27 @@
 #include <iostream>
 
 int main() {
-    int num_chairs, num_customers;
+    std::srand(std::time(nullptr));
 
-    std::cout << "Ingrese el numero de sillas de la sala de espera: ";
-    std::cin >> num_chairs;
-    if (num_chairs < 1) num_chairs = 3;
+    // Generar valores aleatorios
+    int num_chairs    = std::rand() % 10 + 1;   // 1 a 10 sillas
+    int num_customers = std::rand() % 20 + 10;  // 10 a 29 clientes
 
-    std::cout << "Ingrese el numero de clientes: ";
-    std::cin >> num_customers;
-    if (num_customers < 1) num_customers = 10;
+    std::cout << "Numero de sillas de la sala de espera: " << num_chairs
+              << " (aleatorio)" << std::endl;
+    std::cout << "Numero de clientes: " << num_customers
+              << " (aleatorio)" << std::endl;
 
     BarberShop shop(num_chairs);
-
-    std::srand(std::time(nullptr));
 
     std::thread barber_thread(&BarberShop::barber, &shop);
 
     std::vector<std::thread> customer_threads;
     for (int i = 1; i <= num_customers; ++i) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(std::rand() % 1000 + 1500));
+        // Tiempo de llegada aleatorio entre 2000 y 4999 ms
+        // (intervalo mayor que el corte de 1.5s para que el barbero alterne
+        //  entre atender y dormir, con acumulación ocasional de clientes)
+        std::this_thread::sleep_for(std::chrono::milliseconds(std::rand() % 3000 + 2000));
         customer_threads.emplace_back(&BarberShop::customer, &shop, i);
     }
 
