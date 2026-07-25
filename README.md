@@ -85,13 +85,14 @@ cd custom-semaphore-barber
 make
 ```
 ```bash
+# Ejecuta la simulación (pedirá datos por teclado)
 ./build/barber_shop
 ```
 ```bash
 make clean
 ```
 
-Al ejecutar, el programa genera automáticamente valores aleatorios para la cantidad de sillas de espera (1-10), la cantidad de clientes (10-29) y el tiempo de llegada de cada cliente (2000-4999 ms):
+Al ejecutar, el programa solicitará por teclado la cantidad de sillas de espera y la cantidad de clientes:
 
 ```
 Numero de sillas de la sala de espera: 5 (aleatorio)
@@ -104,7 +105,7 @@ Numero de clientes: 15 (aleatorio)
 
 ### Contexto del Problema
 
-Una barbería tiene una sala de espera con **n sillas** (generadas aleatoriamente entre 1 y 10) y una silla de barbería. El barbero y los clientes son **hilos concurrentes** que deben coordinarse sin condiciones de carrera. La cantidad de clientes (10-29) y el tiempo de llegada de cada uno (2000-4999 ms) también se generan aleatoriamente.
+Una barbería tiene una sala de espera con **n sillas** (configurable por el usuario al ejecutar) y una sala de barbería con la silla del barbero. El barbero y los clientes son **hilos concurrentes** que deben coordinarse sin condiciones de carrera. El programa pide al usuario la cantidad de sillas y la cantidad de clientes, luego inicia la simulación.
 
 ### Condiciones del Problema
 
@@ -161,11 +162,11 @@ Cada cliente se ejecuta una vez y termina:
    - Imprime `"[Cliente N] No hay sillas disponibles, se va."`.
    - El hilo termina sin cortarse el pelo.
 
-### Flujo en Consola (ejemplo con 3 sillas, 5 clientes)
+### Flujo en Consola (ejemplo con 3 sillas, 3 clientes)
 
 ```
-Numero de sillas de la sala de espera: 3 (aleatorio)
-Numero de clientes: 5 (aleatorio)
+Ingrese el numero de sillas de la sala de espera: 3
+Ingrese el numero de clientes: 3
 [Barbero] No hay clientes, durmiendo...
 [Cliente 1] Se sienta en una silla. (Libres: 2)
 [Barbero] Despertado por un cliente.
