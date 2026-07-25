@@ -30,6 +30,12 @@ public:
     */
     void signal();
 
+    /*
+      get_count() - Retorna el valor actual del contador interno.
+      Útil para consultar si hay señales pendientes sin modificar el estado.
+    */
+    int get_count() const;
+
 private:
     int count;
     std::mutex mtx;

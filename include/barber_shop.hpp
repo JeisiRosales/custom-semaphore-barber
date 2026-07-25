@@ -18,8 +18,10 @@ public:
 
     /*
       barber() - Método ejecutado por el hilo del barbero.
-      Ciclo infinito: espera clientes, libera sillas, notifica al cliente
-      y simula el corte de pelo.
+      Ciclo infinito con detección de estado (sleeping/was_sleeping):
+      espera clientes, libera sillas, notifica al cliente y simula
+      el corte de pelo. Distingue entre despertar y atender en cola
+      mediante customers_ready.get_count().
     */
     void barber();
 
@@ -34,7 +36,7 @@ private:
     int free_chairs;         // Sillas disponibles actualmente
 
     std::mutex chair_mutex;  // Mutex estándar para proteger free_chairs
-    Semaphore customers_ready;  // Semáforo: despierta al barbero (clientes esperando)
+    Semaphore customers_ready;  // Semáforo: despierta al barbero; get_count() consulta cola
     Semaphore barber_ready;     // Semáforo: barbero notifica al cliente que pase
 };
 
