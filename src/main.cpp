@@ -31,10 +31,10 @@ int main() {
 
     std::vector<std::thread> customer_threads;
     for (int i = 1; i <= num_customers; ++i) {
-        // Tiempo de llegada aleatorio entre 2000 y 4999 ms
-        // (intervalo mayor que el corte de 1.5s para que el barbero alterne
-        //  entre atender y dormir, con acumulación ocasional de clientes)
-        std::this_thread::sleep_for(std::chrono::milliseconds(std::rand() % 3000 + 2000));
+        // Tiempo de llegada aleatorio entre 100 y 1000 ms
+        // (intervalo mucho menor que el corte de 1.5s para que los clientes
+        //  se acumulen rápidamente en la sala de espera)
+        std::this_thread::sleep_for(std::chrono::milliseconds(std::rand() % 900 + 100));
         customer_threads.emplace_back(&BarberShop::customer, &shop, i);
     }
 

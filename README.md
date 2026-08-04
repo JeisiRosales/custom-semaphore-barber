@@ -190,7 +190,7 @@ Ingrese el numero de clientes: 3
 [Barbero] Despertado por un cliente.
 [Barbero] Cortando el cabello...
 [Cliente 5] Le estan cortando el pelo...
-[Barbero] Corte terminado.
+mak[Barbero] Corte terminado.
 [Barbero] No hay clientes, durmiendo...                 ← se queda dormido para siempre
 ```
 
